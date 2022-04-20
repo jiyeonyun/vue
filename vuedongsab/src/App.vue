@@ -1,9 +1,16 @@
 <template>
-  <Modal @modalClose='modalOpen = false' :modalOpen="modalOpen" :products="products" :clickedNum ="clickedNum"/>
+  <transition name="fade">
+    <Modal @modalClose='modalOpen = false' :modalOpen="modalOpen" :products="products" :clickedNum ="clickedNum"/>
+  </transition>
+  
   <div class="nav">
     <a v-for="(menu,i) in menus" :key="i">{{menu}}</a>
   </div>
-  <Discount/>
+  <Discount v-if="showDiscount === true" :discountPercent="discountPercent" />
+  <button @click="priceSort()">가격순 정렬</button>
+  <button @click="priceSortRe()">가격역순 정렬</button>
+  <button @click="sortGanada()">가나다 정렬</button>
+  <button @click="sortBack()">되돌리기</button>
   <Card @openModals="cliked(i)" v-for="(product,i) in products" :key="i"
         :product="products[i]"/>
   
@@ -20,10 +27,13 @@ export default {
   name: 'App',
   data(){
     return{
+      originProducts : room,
       modalOpen : false,
-      products : room,
+      products : [...room],
       menus : ['home' , 'about' , 'products'],
       clickedNum : 0,
+      showDiscount : true,
+      discountPercent : 30,
     }
   },
   //함수만드는 공간
@@ -32,7 +42,40 @@ export default {
     cliked(i){
       this.modalOpen = true,
       this.clickedNum = i
-    }
+    },
+    priceSort(){
+      this.products.sort(
+        function(a,b){
+          return a.price-b.price
+        }
+      );
+    },
+    priceSortRe(){
+      this.products.sort(
+            function(a,b){
+              return b.price-a.price
+            }
+          );
+    },
+    sortBack(){
+      this.products = [...this.originProducts];
+    },
+    sortGanada(){
+      this.products.sort(
+        function(a,b){
+          if(a.title<b.title)return -1;
+          if(a.title>b.title) return 1;
+          return 0
+        }
+      );
+    },
+  },
+  mounted(){
+      setInterval(() => {
+          if(this.discountPercent>0){
+            this.discountPercent --;
+          }
+      }, 1000);
   },
   components: {
     Discount,
@@ -43,6 +86,25 @@ export default {
 </script>
 
 <style>
+.fade-enter-from{
+  transform: translateY(-1000px);
+}
+.fade-enter-active{
+  transition: all 1s;
+}
+.fade-enter-to{
+  transform: translateY(0px);
+}
+.fade-leave-from{
+  transform: translateY(0px);
+}
+.fade-leave-active{
+  transition: all 1s;
+}
+.fade-leave-to{
+  transform: translateY(-1000px);
+}
+
 body{
   margin:0;
 }
@@ -72,5 +134,4 @@ button{
   color:  whitesmoke;
   padding: 10px;
 }
-
 </style>
