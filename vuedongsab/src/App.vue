@@ -11,16 +11,16 @@
     <a v-for="(menu,i) in menus" :key="i">{{menu}}</a>
   </div>
   <div v-for='(product,i) in products' :key='i'>
-    <img :src="imgs[i]" class="room-img"/>
-    <h4 @click="modalOpen = true">{{product}}</h4>
-    <p>50만원</p>
-    <button @click="increase(i)">허위매물신고</button>
-    <span>신고수 : {{신고수[i]}} </span>
+    <img :src="product.image" class="room-img"/>
+    <h4 @click="modalOpen = true">{{product.title}}</h4>
+    <p>{{product.price}} 원</p>
+    <p>{{product.content}}</p>
   </div>
 </template>
 
 <script>
 
+import room from './post.js'
 
 export default {
   name: 'App',
@@ -28,14 +28,13 @@ export default {
     return{
       imgs : [require('./assets/room0.jpg'),require('./assets/room1.jpg'),require('./assets/room2.jpg')],
       modalOpen : false,
-      신고수:[0,0,0],
-      products : ['역삼동원룸', '천호동원룸', '마포구원룸'],
+      products : room,
       menus : ['home' , 'about' , 'products'],
     }
   },
   //함수만드는 공간
   methods:{
-    increase(a){this.신고수[a]++} //this.써야 데이터 사용가능
+    // increase(a){this.신고수[a]++} //this.써야 데이터 사용가능
   },
   components: {
   }
@@ -74,7 +73,7 @@ button{
   color: #2c3e50;
 }
 .room-img{
-  widows: 30rem;
+  width: 30rem;
   margin-top: 2rem;
 }
 .nav{
