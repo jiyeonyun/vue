@@ -9,7 +9,7 @@
 export default {
     name: 'List-blog',
     props:{
-        posts : Object,
+        posts : Array,
     }
 }
 </script>

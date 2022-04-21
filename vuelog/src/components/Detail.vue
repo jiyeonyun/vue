@@ -1,9 +1,8 @@
 <template>
-    <div v-for="(post,a) in posts" :key="a">
-        <span>{{post.number + 1}}.</span>
-        <h5>{{post.title}}</h5>
-        <p>{{post.content}}</p>
-        <span>{{post.date}}</span>
+    <div>
+        <h5>{{posts[$route.params.id].title}}</h5>
+        <p>{{posts[$route.params.id].content}}</p>
+        <span>{{posts[$route.params.id].date}}</span>
     </div>
 </template>
 
@@ -11,7 +10,7 @@
 export default {
     name: "detail-page",
     props:{
-        posts : Object,
+        posts : Array,
     }
 }
 </script>
